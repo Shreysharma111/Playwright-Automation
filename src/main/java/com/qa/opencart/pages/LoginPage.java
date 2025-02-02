@@ -1,6 +1,7 @@
 package com.qa.opencart.pages;
 
 import com.microsoft.playwright.Page;
+import com.microsoft.playwright.options.LoadState;
 
 public class LoginPage {
 
@@ -24,7 +25,7 @@ public class LoginPage {
     }
 
     public boolean isForgotPwdLinkExist() {
-        return page.isVisible(forgotPwdLink);
+        return page.waitForSelector(forgotPwdLink).isVisible();
     }
 
     public boolean doLogin(String appUserName, String appPassword) {
@@ -32,6 +33,7 @@ public class LoginPage {
         page.fill(emailId, appUserName);
         page.fill(password, appPassword);
         page.click(loginBtn);
+        page.waitForLoadState(LoadState.NETWORKIDLE);
         if(page.isVisible(logoutLink)) {
             System.out.println("user is logged in successfully....");
             return true;
